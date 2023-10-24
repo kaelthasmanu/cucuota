@@ -137,7 +137,7 @@ This is an example of how to list things you need to use the software and how to
   ```sh
   touch appsettings.json
   ```
-  <p>For its correct functioning, this application needs the appsettings.json file to contain the following information</p>
+8. For its correct functioning, this application needs the `appsettings.json` file to contain the following information
   ```sh
   {
   "Logging": {
