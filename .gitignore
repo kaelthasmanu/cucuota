@@ -2,8 +2,7 @@
 .idea/
 
 #Ignore appsettings
-*.json
-cucuota/*.json
+cucuota/appsettings.json
 
 # Ignore build output
 cucuota/bin/
