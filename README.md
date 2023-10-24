@@ -133,6 +133,43 @@ This is an example of how to list things you need to use the software and how to
   ```sh
   touch banned.txt
   ```
+7. Crate file with name `appsettings.json`
+  ```sh
+  touch appsettings.json
+  ```
+8. For its correct functioning, this application needs the `appsettings.json` file to contain the following information
+  ```sh
+  {
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "WorkingFiles": {
+    "LogFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/access.log",
+    "QuoteFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/quota.txt",
+    "BannedFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/banned.txt"
+  },
+  "LDAPServer": {
+    "Server": "domain or ip",
+    "ServerPort": 389,
+    "UserDN": "manuel",
+    "PasswordDN": "password",
+    "DN": "ou=Usuarios,dc=domain,dc=cu"
+  },
+  "URLListen": {
+    "base_url": "http://0.0.0.0:5173"
+  },
+  "JwtOptions": {
+    "Issuer": "https://localhost:7004",
+    "Audience": "https://localhost:7004",
+    "SigningKey": "4a9d45c7b5719c26d673be5944de1994e8432d70aafadf944c0c90b6f9437d1f",
+    "ExpirationSeconds": 3600
+  }
+}
+```
 6. Change some variables `appsettings.json`
    ```sh
    nano appsettings.json
