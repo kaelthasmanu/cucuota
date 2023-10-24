@@ -1,0 +1,35 @@
+# Ignore JetBrains Rider folders
+.idea/
+
+#Ignore appsettings
+*.json
+cucuota/*.json
+
+# Ignore build output
+cucuota/bin/
+cucuota/obj/
+ChangeCantQuotaTest/obj/
+ChangeCantQuotaTest/bin/
+
+# Ignore user-specific files
+.vscode/
+*.suo
+*.user
+*.suo
+*.user
+*.suo
+*.user
+*.suo
+*.user
+*.suo
+*.user
+*.suo
+*.user
+
+# Ignore build and publish output
+/publish/
+/deploy/
+/logs/
+/package-lock.json
+# Ignore database
+cucuota/database.db

@@ -1,0 +1,14 @@
+[Unit]
+Description=cucuota
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dotnet /ruta/a/tu/aplicacion.dll
+WorkingDirectory=/ruta/a/tu/aplicacion
+Restart=always
+RestartSec=10
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Development
+
+[Install]
+WantedBy=multi-user.target
