@@ -115,7 +115,7 @@ This is an example of how to list things you need to use the software and how to
 
 1. Download files
    ```sh
-   wget https://github.com/kaelthasmanu/cucuota/releases/download/0.0.2/linux.zip
+   wget https://github.com/kaelthasmanu/cucuota/releases/download/0.0.1/cucuota.zip
    ```
 2. Install packages `.Net7 and zip`
    ```sh
@@ -123,13 +123,19 @@ This is an example of how to list things you need to use the software and how to
    ```
 3. Unzip folder `linux-64.zip`
    ```sh
-   unzip linux.zip
+   unzip cucuota.zip
    ```
 4. Create file for quotas `quota.txt`
   ```sh
   touch quota.txt
   ```
-5. Create file for banned users `banned.txt`
+5. Example configuration for `quota.txt`
+   ```sh
+   manuel.gorrin     15gb/Month #Manuel Alberto Gorrin
+   pepe.alberto      5gb/Month #Pepe Alberto
+   juan.alfonso      10gb/Month #Juan Alfonso
+   ```
+6. Create file for banned users `banned.txt`
   ```sh
   touch banned.txt
   ```
@@ -170,31 +176,31 @@ This is an example of how to list things you need to use the software and how to
   }
 }
 ```
-6. Change some variables `appsettings.json`
+9. Change some variables `appsettings.json`
    ```sh
    nano appsettings.json
    ```
-7. Run project `cucuota.dll`
+10. Run project `cucuota.dll`
    ```sh
    dotnet cucuota.dll
    ```
-8. Adapt the systemd configuration for you in file `dotnet`
+11. Adapt the systemd configuration for you in file `dotnet`
   ```sh
   nano cucuota
   ```
-9. Copy file in the directory `etc/systemd/system`
+12. Copy file in the directory `etc/systemd/system`
   ```sh
   cp cucuota /etc/systemd/system/
   ```
-10. Reload all services systemd
+13. Reload all services systemd
   ```sh
   sudo systemctl daemon-reload
   ```
-11. Enable serivice `cucuota`
+14. Enable serivice `cucuota`
   ```sh
    systemctl enable cucuota
    ```
-12. Check status service 
+15. Check status service 
   ```sh
   systemctl status cucuota
   ```
