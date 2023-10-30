@@ -1,5 +1,8 @@
 # Ignore JetBrains Rider folders
 .idea/
+.DS_Store
+cucuota/.DS_Store
+
 
 #Ignore appsettings
 cucuota/appsettings.json
