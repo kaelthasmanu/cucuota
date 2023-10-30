@@ -48,30 +48,39 @@ public class ReadLog
             string[] splitLine = new string[10];
             foreach (var user in usersUnicos)
             {
-                using (StreamReader sr = new StreamReader(filePath))
+                try
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    using (StreamReader sr = new StreamReader(filePath))
                     {
-                        if (!line.Contains("HIER_NONE") && line.Contains(user))
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            string cleanedLine = Regex.Replace(line, @"\s+", " ");
-                            splitLine = cleanedLine.Split(" ");
-                            if (Database.DoesLastDateTimeExist() == true)
+                            if (!line.Contains("HIER_NONE") && line.Contains(user))
                             {
-                                if (DateTime.Compare(Parsing.timestapToDate(double.Parse(splitLine[0])),
-                                        Database.GetLastDateTime()) > 0)
+                                string cleanedLine = Regex.Replace(line, @"\s+", " ");
+                                splitLine = cleanedLine.Split(" ");
+                                if (Database.DoesLastDateTimeExist() == true)
+                                {
+                                    if (DateTime.Compare(Parsing.timestapToDate(double.Parse(splitLine[0])),
+                                            Database.GetLastDateTime()) > 0)
+                                    {
+                                        gigabytesForUser += double.Parse(splitLine[4]);
+                                    }
+                                }
+                                else
                                 {
                                     gigabytesForUser += double.Parse(splitLine[4]);
                                 }
                             }
-                            else
-                            {
-                                gigabytesForUser += double.Parse(splitLine[4]);
-                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error {e}");
+                }
+                
+                    
                 //Save traffic in MB
                 _database.AddOrUpdateUserData(user, Math.Round(gigabytesForUser / 1024 / 1024, 2), 0, 0); 
                 gigabytesForUser = 0;

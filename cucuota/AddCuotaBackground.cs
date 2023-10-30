@@ -14,8 +14,15 @@ public class AddCuotaBackground:BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(1000,stoppingToken);
-            _updateDataCuota.RunCuota();
-            await Task.Delay(900000,stoppingToken);
+            try
+            {
+                _updateDataCuota.RunCuota();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("File not found");   
+            }
+            await Task.Delay(9000,stoppingToken);
         }
     }
 }

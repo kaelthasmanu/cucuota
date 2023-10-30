@@ -21,7 +21,7 @@ public class UpdateDataCuota
             
             database.CreateTablesIfNotExist();
             var users = log.ReadFileToUsers(_workingFiles.FullLogFilePath);
-            log.ReadFileToTraffic(users,_workingFiles.FullLogFilePath);
+            log.ReadFileToTraffic(users, _workingFiles.FullLogFilePath);
             var list = Parsing.ParseUserData(_workingFiles.FullQuoteFilePath);
             List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(Database.GetAllUserDataAsJson());
             foreach (var user in userList)

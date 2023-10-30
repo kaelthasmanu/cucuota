@@ -7,10 +7,11 @@ public class Database
         private readonly static string databasePath = "database.db";
         private readonly string tableusers = "user";
         private readonly string tabledate = "date";
+        private readonly string tableadmins = "admins";
 
         public void CreateTablesIfNotExist()
         {
-            if (!TableExists(tableusers) && !TableExists(tabledate))
+            if (!TableExists(tableusers) && !TableExists(tabledate)  && !TableExists(tableadmins))
             {
                 CreateTable("user",
                     "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
@@ -22,6 +23,10 @@ public class Database
                 CreateTable("date",
                     "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     "dateTime DATETIME NOT NULL");
+                
+                CreateTable("admins",
+                    "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                    "username TEXT NOT NULL");
 
                 Console.WriteLine("Tables created successfully.");
             }
