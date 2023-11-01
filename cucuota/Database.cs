@@ -1,17 +1,15 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System.Text.RegularExpressions;
+using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 namespace cucuota;
 
 public class Database
     {
         private readonly static string databasePath = "database.db";
-        private readonly string tableusers = "user";
-        private readonly string tabledate = "date";
-        private readonly string tableadmins = "admins";
 
         public void CreateTablesIfNotExist()
         {
-            if (!TableExists(tableusers) && !TableExists(tabledate)  && !TableExists(tableadmins))
+            if (!TableExists("user") && !TableExists("date")  && !TableExists("admins"))
             {
                 CreateTable("user",
                     "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
@@ -128,12 +126,8 @@ public class Database
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
-                
             }
+            return false;
         }
         public static DateTime GetLastDateTime()
         {
@@ -227,4 +221,64 @@ public class Database
                 return jsonResult;
             }
         }
+
+        public static bool IsValidEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, pattern);
+        }
+
+        public static bool CreateAdmin(string username)
+        {
+            if (!IsValidEmail(username))
+            {
+                // Invalid email, so don't proceed.
+                return false;
+            }
+
+            try
+            {
+                using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+                {
+                    connection.Open();
+            
+                    if (IsAdminExists(connection, username))
+                    {
+                        // Admin with this username already exists.
+                        return false;
+                    }
+
+                    InsertAdmin(connection, username);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while executing SQL: " + e.Message);
+                return false;
+            }
+        }
+
+        private static bool IsAdminExists(SqliteConnection connection, string username)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT COUNT(*) FROM admins WHERE username = $username;";
+                command.Parameters.AddWithValue("$username", username);
+
+                int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
+                return existingUserCount > 0;
+            }
+        }
+
+        private static void InsertAdmin(SqliteConnection connection, string username)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "INSERT INTO admins (username) VALUES ($username);";
+                command.Parameters.AddWithValue("$username", username);
+                command.ExecuteNonQuery();
+            }
+        }
+
     }
