@@ -26,11 +26,11 @@ public class CreateUsersAdmin:ControllerBase
 public class DeleteUsersAdmin:ControllerBase
 {
     [HttpPost(Name = "DeleteUsersAdmin")]
-    public IActionResult Post(string request)
+    public IActionResult Post(string username)
     {
-        bool isValid = Database.IsValidEmail(request);
-        if (isValid)
+        if (Database.IsValidEmail(username))
         {
+            Database.DeleteAdmin(username);
             return Ok("Is Valid.");
         }
         return BadRequest("Not Valid");

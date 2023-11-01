@@ -280,5 +280,47 @@ public class Database
                 command.ExecuteNonQuery();
             }
         }
+        
+        public static bool DeleteAdmin(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                // El nombre de usuario no es válido, no procedemos.
+                return false;
+            }
+
+            try
+            {
+                using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+                {
+                    connection.Open();
+
+                    if (!IsAdminExists(connection, username))
+                    {
+                        // El admin no existe, no podemos eliminarlo.
+                        return false;
+                    }
+
+                    RemoveAdmin(connection, username);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error while executing SQL: " + e.Message);
+                return false;
+            }
+        }
+
+        private static void RemoveAdmin(SqliteConnection connection, string username)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM admins WHERE username = $username;";
+                command.Parameters.AddWithValue("$username", username);
+                command.ExecuteNonQuery();
+            }
+        }
+
 
     }
