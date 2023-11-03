@@ -7,6 +7,7 @@ namespace cucuota.Controllers;
 
 public class CreateUsersAdmin:ControllerBase
 {
+    //[Authorize]
     [HttpPost(Name = "CreateUsersAdmin")]
     public IActionResult Post(string username, bool admin)
     {
@@ -25,6 +26,7 @@ public class CreateUsersAdmin:ControllerBase
 [Route("[controller]")]
 public class DeleteUsersAdmin:ControllerBase
 {
+    //[Authorize]
     [HttpPost(Name = "DeleteUsersAdmin")]
     public IActionResult Post(string username)
     {

@@ -34,7 +34,7 @@ class Program
             options.AddPolicy(name: MyAllowSpecificOrigins,
                 policy  =>
                 {
-                    policy.WithOrigins("http://localhost/").AllowAnyOrigin();
+                    policy.WithOrigins("https://localhost/").AllowAnyOrigin();
                 });
         });
         builder.Services.AddSingleton(jwtOptions);
