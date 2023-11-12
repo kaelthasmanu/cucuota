@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace cucuota.Controllers;
 
@@ -12,11 +13,25 @@ public class AuthUserLDAP:ControllerBase
         bool resp = ldapUtils.AuthenticateUser(request.Username, request.Password);
         if (resp)
         {
-            return Ok("Users Auth OK.");
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            string token = Convert.ToBase64String(time.Concat(key).ToArray());
+            var data = new Dictionary<string, string>()
+            {
+                { "message", "Success" },
+                {"accessToken", token},
+                {"user", request.Username}
+            };
+            return Ok(JsonConvert.SerializeObject(data));
         }
         else
         {
-            return BadRequest("Credentials invalid or user not exist.");
+            var data = new Dictionary<string, string>()
+            {
+                { "message", "Credential Invalid" },
+                {   "user" , request.Username },
+            };
+            return BadRequest(JsonConvert.SerializeObject(data));
         }
     }
 }
