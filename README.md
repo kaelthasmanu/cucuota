@@ -101,7 +101,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This project is an alternative to a quota system for Squid. Client Web for this project [CucuotaWeb](https://github.com/Rooterts/CuCuotaWeb)
+This project is an alternative to a quota system for Squid. Client Web for this project [CucuotaWeb](https://github.com/kaelthasmanu/cucuota-frontend)
 
 ### Prerequisites
 
