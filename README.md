@@ -84,6 +84,7 @@
 ## About The Project
 
 ![Example FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example.jpg)
+![Example2 FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example2.jpg)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
