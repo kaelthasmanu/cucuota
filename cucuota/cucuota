@@ -7,6 +7,8 @@ ExecStart=/usr/bin/dotnet /ruta/a/tu/aplicacion.dll
 WorkingDirectory=/ruta/a/tu/aplicacion
 Restart=always
 RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-cucuota
 User=root
 Environment=ASPNETCORE_ENVIRONMENT=Development
 
