@@ -4,7 +4,7 @@ EXPOSE 5173
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["cucuota/cucuota.csproj", "cucuota/"]
+COPY ["./cucuota.csproj", "cucuota/"]
 RUN dotnet restore "cucuota/cucuota.csproj"
 COPY . .
 WORKDIR "/src/cucuota"
