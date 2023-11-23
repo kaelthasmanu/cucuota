@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  cucuota:
+    build:
+      context: ./
+      dockerfile: ./cucuota/Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./app:/app
