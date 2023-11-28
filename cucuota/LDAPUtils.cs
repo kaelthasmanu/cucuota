@@ -33,63 +33,65 @@ public class LDAPUtils
         _serverLDAP = serverLDAP.Value;
     }
     public bool SearchUser(string usernameToSearch)
+{
+    using (LdapConnection cn = new LdapConnection(new LdapDirectoryIdentifier(_serverLDAP.serverPath,_serverLDAP.ServerPort)))
     {
-        using (LdapConnection cn = new LdapConnection(new LdapDirectoryIdentifier(_serverLDAP.serverPath, _serverLDAP.serverPort)))
+        cn.SessionOptions.ProtocolVersion = 3;
+        cn.AuthType = AuthType.Basic;
+        try
         {
-            cn.SessionOptions.ProtocolVersion = 3;
-            cn.AuthType = AuthType.Basic;
-            try
-            {
-                cn.Bind(new NetworkCredential(_serverLDAP.userDN, _serverLDAP.userDNPassword));
-                // Define la consulta LDAP
-                string filter = $"(&(objectClass=user)(sAMAccountName={usernameToSearch}))";
-                string[] attributesToRetrieve = new string[] { "*" }; // Ajusta los atributos que deseas recuperar
+            cn.Bind(new NetworkCredential(_serverLDAP.userDN, _serverLDAP.userDNPassword));
+            
+            
+            string searchFilter = String.Format("sAMAccountname={0}", usernameToSearch);
+            string[] attributesToRetrieve = new string[] { "displayName", "mail", "whenchanged", "badpwdcount", "badpasswordtime", "whencreated", "lastlogoff", "physicaldeliveryofficename", "lastlogon", "pwdlastset" };
+            
+            SearchRequest searchRequest = new SearchRequest(
+                _serverLDAP.distinguishedNames,
+                searchFilter,
+                SearchScope.Subtree,
+                attributesToRetrieve
+            );
 
-                SearchRequest searchRequest = new SearchRequest(
-                    _serverLDAP.distinguishedNames,
-                    filter,
-                    SearchScope.Subtree,
-                    attributesToRetrieve
-                );
-
-                SearchResponse searchResponse = (SearchResponse)cn.SendRequest(searchRequest);
-
-                if (searchResponse.Entries.Count > 0)
-                {
-                    // Se encontró al usuario
-                    foreach (SearchResultEntry entry in searchResponse.Entries)
-                    {
-                        string displayName = entry.Attributes["displayName"][0].ToString();
-                        string email = entry.Attributes["mail"][0].ToString();
-                        string whenchanged = entry.Attributes["whenchanged"][0].ToString();
-                        string badpwdcount = entry.Attributes["badpwdcount"][0].ToString();
-                        string badpasswordtime = entry.Attributes["badpasswordtime"][0].ToString();
-                        string whencreated = entry.Attributes["whencreated"][0].ToString();
-                        string lastlogoff = entry.Attributes["lastlogoff"][0].ToString();
-                        string physicaldeliveryofficename = entry.Attributes["physicaldeliveryofficename"][0].ToString();
-                        DateTime lastlogon = DateTime.FromFileTime(long.Parse(entry.Attributes["lastlogon"][0].ToString()));
-                        DateTime pwdLastSetDateTime = DateTime.FromFileTime(long.Parse(entry.Attributes["pwdlastset"][0].ToString()));
-                        Console.WriteLine($"Nombre de usuario: {usernameToSearch} \nNombre: {displayName} \nCorreo electrónico: {email} \n" +
-                                          $"Whenchanged: {whenchanged} \nDelivery: {physicaldeliveryofficename} \nCreated: {whencreated} \n" +
-                                          $"Lastlogon: {lastlogon} \nLastlogoff: {lastlogoff} \nLastSetPassword: {pwdLastSetDateTime}");
-                        return true;
-                    }
-                }
-                else
-                {
-                    // El usuario no se encontró
-                    Console.WriteLine($"No se encontró el usuario: {usernameToSearch}");
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error de LDAP: " + e.Message);
-                return false;
-            }
+            var searchResponse = (SearchResponse)cn.SendRequest(searchRequest);
+             if (searchResponse.Entries.Count > 0)
+             {
+                 return true;
+             }
+            return false;
         }
-        return false;
+        catch (LdapException lex)
+        {
+            Console.WriteLine($"Error LDAP: {lex.Message}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error general: {ex.Message}");
+            return false;
+        }
     }
+}
+
+private void HandleSearchResponse(string usernameToSearch, SearchResponse searchResponse)
+{
+    if (searchResponse.Entries.Count > 0)
+    {
+        foreach (SearchResultEntry entry in searchResponse.Entries)
+        {
+            DateTime lastlogon = DateTime.FromFileTime(long.Parse(entry.Attributes["lastlogon"][0].ToString()));
+            DateTime pwdLastSetDateTime = DateTime.FromFileTime(long.Parse(entry.Attributes["pwdlastset"][0].ToString()));
+            Console.WriteLine($"Nombre de usuario: {usernameToSearch}");
+            Console.WriteLine($"Lastlogon: {lastlogon}");
+            Console.WriteLine($"LastSetPassword: {pwdLastSetDateTime}");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"No se encontró el usuario: {usernameToSearch}");
+    }
+}
+
     
 
     public bool AuthenticateUser(string _username, string _password)

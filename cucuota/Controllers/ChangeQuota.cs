@@ -10,10 +10,10 @@ public class ChangeQuotaController : ControllerBase
 {
     //[Authorize]
     [HttpPost(Name = "ChangeQuota")]
-    public IActionResult Post(UserData request, [FromServices] ChangeCantQuota changeCantQuota)
+    public IActionResult Post(UserData request, [FromServices] ChangeCantQuota changeCantQuota, [FromServices] LDAPUtils ldapUtils)
     {
         bool resp = changeCantQuota.Change(request.Username, request.Gigabytes);
-        if (resp)
+        if (resp && ldapUtils.SearchUser(request.Username))
         {
             return Ok("Quota updated successfully.");
         }

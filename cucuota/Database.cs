@@ -222,7 +222,7 @@ public class Database
             }
         }
 
-        public static bool IsValidEmail(string email)
+        private static bool IsValidEmail(string email)
         {
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, pattern);
@@ -258,6 +258,21 @@ public class Database
                 return false;
             }
         }
+        public static bool IsAdminExists(string username)
+        {
+            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT COUNT(*) FROM admins WHERE username = $username;";
+                    command.Parameters.AddWithValue("$username", username);
+
+                    int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
+                    return existingUserCount > 0;
+                }
+            }
+        }
 
         private static bool IsAdminExists(SqliteConnection connection, string username)
         {
@@ -268,6 +283,20 @@ public class Database
 
                 int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
                 return existingUserCount > 0;
+            }
+        }
+
+        public static bool VerifyAdmin(string username)
+        {
+            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+            {
+                connection.Open();
+                if (IsAdminExists(connection, username))
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 
@@ -283,7 +312,7 @@ public class Database
         
         public static bool DeleteAdmin(string username)
         {
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(username) || !IsValidEmail(username))
             {
                 // El nombre de usuario no es válido, no procedemos.
                 return false;

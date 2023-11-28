@@ -16,13 +16,27 @@ public class AuthUserLDAP:ControllerBase
             byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
             byte[] key = Guid.NewGuid().ToByteArray();
             string token = Convert.ToBase64String(time.Concat(key).ToArray());
-            var data = new Dictionary<string, string>()
+            if (Database.VerifyAdmin(request.Username))
             {
-                { "message", "Success" },
-                {"accessToken", token},
-                {"user", request.Username}
-            };
-            return Ok(JsonConvert.SerializeObject(data));
+                var data = new Dictionary<string, string>()
+                {
+                    { "message", "Success" },
+                    {"accessToken", token},
+                    {"user", request.Username},
+                    {"admin", "true"}
+                };
+                return Ok(JsonConvert.SerializeObject(data));    
+            }
+            else
+            {
+                var data = new Dictionary<string, string>()
+                {
+                    { "message", "Success" },
+                    {"accessToken", token},
+                    {"user", request.Username}
+                };
+                return Ok(JsonConvert.SerializeObject(data));
+            }
         }
         else
         {
