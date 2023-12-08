@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cucuota", "cucuota\cucuota.csproj", "{73D0C8B9-C334-46B3-8A77-C6DAEAF5CCBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeCantQuotaTest", "ChangeCantQuotaTest\ChangeCantQuotaTest.csproj", "{86800223-B85A-4A81-94EA-56133057B067}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,9 +12,5 @@ Global
 		{73D0C8B9-C334-46B3-8A77-C6DAEAF5CCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73D0C8B9-C334-46B3-8A77-C6DAEAF5CCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73D0C8B9-C334-46B3-8A77-C6DAEAF5CCBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86800223-B85A-4A81-94EA-56133057B067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86800223-B85A-4A81-94EA-56133057B067}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86800223-B85A-4A81-94EA-56133057B067}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86800223-B85A-4A81-94EA-56133057B067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

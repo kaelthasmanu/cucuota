@@ -1,6 +1,7 @@
 using System.Text;
 using cucuota;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -63,7 +64,13 @@ class Program
 
         builder.Services.AddScoped<ChangeCantQuota>();
         builder.Services.AddScoped<LDAPUtils>();
-        builder.Services.AddSingleton<UpdateDataCuota>();
+        builder.Services.AddScoped<ReadLog>();
+        builder.Services.AddScoped<UpdateDataCuota>();
+        builder.Services.AddDbContext<Database>(optionsBuilder =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("DefaultAPP");
+            optionsBuilder.UseSqlite(connectionString);
+        });
 
         var app = builder.Build();
 
@@ -83,6 +90,10 @@ class Program
         app.UseCors(MyAllowSpecificOrigins);
 
         app.MapControllers();
+
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<Database>();
+        db.Database.Migrate();
 
         app.Run(config.GetSection("URLListen").GetSection("base_url").Value);
     }

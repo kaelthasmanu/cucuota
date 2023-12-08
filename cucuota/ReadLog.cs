@@ -1,12 +1,18 @@
 ﻿using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 namespace cucuota;
 
 public class ReadLog
     {
-        private Database _database = new Database();
+        
+        public ReadLog(Database database)
+        {
+            _database = database;
+        }
+        private readonly Database _database ;
         private double gigabytes = 0;
         private double gigabytesForUser = 0;
         //private readonly LogOptions _options;
@@ -59,10 +65,10 @@ public class ReadLog
                             {
                                 string cleanedLine = Regex.Replace(line, @"\s+", " ");
                                 splitLine = cleanedLine.Split(" ");
-                                if (Database.DoesLastDateTimeExist() == true)
+                                if (_database.DoesLastDateTimeExist() == true)
                                 {
                                     if (DateTime.Compare(Parsing.timestapToDate(double.Parse(splitLine[0])),
-                                            Database.GetLastDateTime()) > 0)
+                                            _database.GetLastDateTime()) > 0)
                                     {
                                         gigabytesForUser += double.Parse(splitLine[4]);
                                     }
@@ -86,7 +92,7 @@ public class ReadLog
                 gigabytesForUser = 0;
             }
             Console.WriteLine("Finish ReadLog adding to database...");
-            Database.AddOrUpdateDateTime(Parsing.timestapToDate(double.Parse(splitLine[0])));
+            _database.AddOrUpdateDateTime(Parsing.timestapToDate(double.Parse(splitLine[0])));
             //Console.WriteLine($"La cantidad total de Gigas es de {Math.Round(gigabytes / 1024 / 1024 / 1024)}GB");
         }
     }

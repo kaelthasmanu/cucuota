@@ -8,7 +8,7 @@ namespace cucuota.Controllers;
 public class AuthUserLDAP:ControllerBase
 {
     [HttpPost(Name = "AuthUserLDAP")]
-    public IActionResult Post(UserLDAP request, [FromServices] LDAPUtils ldapUtils)
+    public IActionResult Post(UserLDAP request, [FromServices] LDAPUtils ldapUtils, [FromServices] Database database)
     {
         bool resp = ldapUtils.AuthenticateUser(request.Username, request.Password);
         if (resp)
@@ -16,7 +16,7 @@ public class AuthUserLDAP:ControllerBase
             byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
             byte[] key = Guid.NewGuid().ToByteArray();
             string token = Convert.ToBase64String(time.Concat(key).ToArray());
-            if (Database.VerifyAdmin(request.Username))
+            if (database.VerifyAdmin(request.Username))
             {
                 var data = new Dictionary<string, string>()
                 {

@@ -9,11 +9,11 @@ public class CreateUsersAdmin:ControllerBase
 {
     //[Authorize]
     [HttpPost(Name = "CreateUsersAdmin")]
-    public IActionResult Post(string username, bool admin)
+    public IActionResult Post(string username, bool admin, [FromServices] Database database)
     {
         if (admin)
         {
-            if (Database.CreateAdmin(username))
+            if (database.CreateAdmin(username))
             {
                 return Ok("User Create.");
             }
@@ -28,9 +28,9 @@ public class DeleteUsersAdmin:ControllerBase
 {
     //[Authorize]
     [HttpPost(Name = "DeleteUsersAdmin")]
-    public IActionResult Post(string username)
+    public IActionResult Post(string username, [FromServices] Database database)
     {
-        if (Database.DeleteAdmin(username))
+        if (database.DeleteAdmin(username))
         {
             return Ok("User Deleted.");    
         }
@@ -43,9 +43,9 @@ public class DeleteUsersAdmin:ControllerBase
 public class CheckAdmin : ControllerBase
 {
     [HttpPost(Name = "CheckAdmin")]
-    public IActionResult Post(string username)
+    public IActionResult Post(string username, [FromServices] Database database)
     {
-        if (Database.IsAdminExists(username))
+        if (database.IsAdminExists(username))
         {
             return Ok("User is admin.");
         }

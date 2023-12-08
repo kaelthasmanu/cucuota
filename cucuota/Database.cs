@@ -1,353 +1,186 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
-namespace cucuota;
+﻿using Microsoft.EntityFrameworkCore;
 
-public class Database
-    {
-        private readonly static string databasePath = "database.db";
-
-        public void CreateTablesIfNotExist()
-        {
-            if (!TableExists("user") && !TableExists("date")  && !TableExists("admins"))
-            {
-                CreateTable("user",
-                    "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "name TEXT NOT NULL," +
-                    "trafficD DECIMAL NOT NULL," +
-                    "trafficW INTEGER NOT NULL," +
-                    "trafficM INTEGER NOT NULL");
-
-                CreateTable("date",
-                    "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "dateTime DATETIME NOT NULL");
-                
-                CreateTable("admins",
-                    "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "username TEXT NOT NULL");
-
-                Console.WriteLine("Tables created successfully.");
-            }
-            else
-            {
-                Console.WriteLine("Tables already exist.");
-            }
-        }
-
-        private void CreateTable(string table, string columns)
-        {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $"CREATE TABLE {table} ({columns});";
-                command.ExecuteNonQuery();
-            }
-        }
-
-        private bool TableExists(string tableName)
-        {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}'";
-
-                using (var reader = command.ExecuteReader())
-                {
-                    return reader.HasRows;
-                }
-            }
-        }
-
-        public void AddOrUpdateUserData(string name, double trafficD, int trafficM, int trafficW)
+public class User
 {
-    using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public double TrafficD { get; set; }
+    public int TrafficW { get; set; }
+    public int TrafficM { get; set; }
+}
+
+public class Date
+{
+    public int Id { get; set; }
+    public DateTime DateTime { get; set; }
+}
+
+public class Admin
+{
+    public int Id { get; set; }
+    public string Username { get; set; }
+}
+
+public class Database : DbContext
+{
+    private readonly string databasePath = "/Users/manuel/Desktop/cucuota/cucuota/database.db";
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Date> Dates { get; set; }
+    public DbSet<Admin> Admins { get; set; }
+
+    public Database(DbContextOptions<Database> options):base(options)
     {
-        connection.Open();
-        var command = connection.CreateCommand();
         
-        command.CommandText = "SELECT COUNT(*) FROM user WHERE name = $name;";
-        command.Parameters.AddWithValue("$name", name);
+    }
+    
 
-        int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
-
-        if (existingUserCount > 0)
+    public void CreateTablesIfNotExist()
+    {
+        if (!Users.Any() && !Dates.Any() && !Admins.Any())
         {
-            command.CommandText =
-                "SELECT trafficD, trafficW, trafficM FROM user WHERE name = $name;";
-            using (var reader = command.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    double currentTrafficD = reader.GetDouble(0);
-                    int currentTrafficW = reader.GetInt32(1);
-                    int currentTrafficM = reader.GetInt32(2);
-                    
-                    trafficD += currentTrafficD;
-                    trafficW += currentTrafficW;
-                    trafficM += currentTrafficM;
-                }
-            }
-            command.CommandText =
-                @"
-                UPDATE user
-                SET trafficD = $trafficD, trafficW = $trafficW, trafficM = $trafficM
-                WHERE name = $name;
-                ";
+            Database.Migrate();
+            Console.WriteLine("Tables created successfully.");
         }
         else
         {
-            command.CommandText =
-                @"
-                INSERT INTO user (name, trafficD, trafficW, trafficM)
-                VALUES ($name, $trafficD, $trafficW, $trafficM);
-                ";
+            Console.WriteLine("Tables already exist.");
         }
-        
-        command.Parameters.AddWithValue("$trafficD", trafficD);
-        command.Parameters.AddWithValue("$trafficW", trafficW);
-        command.Parameters.AddWithValue("$trafficM", trafficM);
-        
-        command.ExecuteNonQuery();
     }
-}
-        public static bool DoesLastDateTimeExist()
+
+    public void AddOrUpdateUserData(string name, double trafficD, int trafficM, int trafficW)
+    {
+        var existingUser = Users.FirstOrDefault(u => u.Name == name);
+
+        if (existingUser != null)
         {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
+            existingUser.TrafficD += trafficD;
+            existingUser.TrafficW += trafficW;
+            existingUser.TrafficM += trafficM;
+        }
+        else
+        {
+            var newUser = new User
             {
-                connection.Open();
-                var command = connection.CreateCommand();
+                Name = name,
+                TrafficD = trafficD,
+                TrafficW = trafficW,
+                TrafficM = trafficM
+            };
+            Users.Add(newUser);
+        }
 
-                command.CommandText = "SELECT COUNT(*) FROM date;";
-                var count = Convert.ToInt32(command.ExecuteScalar());
+        SaveChanges();
+    }
 
-                if (count > 0)
-                {
-                    return true;
-                }
-            }
+    public  bool DoesLastDateTimeExist()
+    {
+        return Dates.Any();
+    }
+
+    public  DateTime GetLastDateTime()
+    {
+        var lastDate = Dates.OrderByDescending(d => d.Id).FirstOrDefault();
+
+        return lastDate != null ? lastDate.DateTime : DateTime.MinValue;
+    }
+
+    public  DateTime AddOrUpdateDateTime(DateTime newDateTime)
+    {
+        var existingDate = Dates.OrderByDescending(d => d.Id).FirstOrDefault();
+
+        if (existingDate != null)
+        {
+            existingDate.DateTime = newDateTime;
+        }
+        else
+        {
+            var newDate = new Date
+            {
+                DateTime = newDateTime
+            };
+            Dates.Add(newDate);
+        }
+
+        SaveChanges();
+
+        return newDateTime;
+    }
+
+    public  string GetAllUserDataAsJson()
+    {
+        var userDataList = Users.Select(u => new
+        {
+            u.Name,
+            u.TrafficD,
+            u.TrafficW,
+            u.TrafficM
+        }).ToList();
+
+        var jsonResult = Newtonsoft.Json.JsonConvert.SerializeObject(userDataList);
+
+        return jsonResult;
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        return System.Text.RegularExpressions.Regex.IsMatch(email, pattern);
+    }
+
+    public  bool CreateAdmin(string username)
+    {
+        if (!IsValidEmail(username))
+        {
+            // Invalid email, so don't proceed.
             return false;
         }
-        public static DateTime GetLastDateTime()
+
+        if (Admins.Any(a => a.Username == username))
         {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-
-                command.CommandText = "SELECT dateTime FROM date ORDER BY id DESC LIMIT 1;";
-
-                var lastDateTime = command.ExecuteScalar();
-
-                if (lastDateTime != null && lastDateTime != DBNull.Value)
-                {
-                    if (lastDateTime is DateTime)
-                    {
-                        return (DateTime)lastDateTime;
-                    }
-                    else if (lastDateTime is string)
-                    {
-                        if (DateTime.TryParse((string)lastDateTime, out DateTime parsedDateTime))
-                        {
-                            return parsedDateTime;
-                        }
-                    }
-                }
-                return DateTime.MinValue;
-            }
-        }
-        
-        public static DateTime AddOrUpdateDateTime(DateTime newDateTime)
-        {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-
-                // Verificar si ya existe un registro
-                command.CommandText = "SELECT id FROM date ORDER BY id DESC LIMIT 1;";
-                var existingId = command.ExecuteScalar();
-
-                if (existingId != null && existingId != DBNull.Value)
-                {
-                    // Si existe, actualiza el registro
-                    command.CommandText = "UPDATE date SET dateTime = $dateTime WHERE id = $id;";
-                    command.Parameters.AddWithValue("$dateTime", newDateTime);
-                    command.Parameters.AddWithValue("$id", existingId);
-                    command.ExecuteNonQuery();
-                }
-                else
-                {
-                    // Si no existe, agrega un nuevo registro
-                    command.CommandText = "INSERT INTO date (dateTime) VALUES ($dateTime);";
-                    command.Parameters.AddWithValue("$dateTime", newDateTime);
-                    command.ExecuteNonQuery();
-                }
-
-                return newDateTime;
-            }
+            // Admin with this username already exists.
+            return false;
         }
 
-        
-        public static string GetAllUserDataAsJson()
+        var newAdmin = new Admin
         {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                
-                command.CommandText = "SELECT name, trafficD, trafficW, trafficM FROM user;";
+            Username = username
+        };
 
-                var result = new List<Dictionary<string, object>>();
+        Admins.Add(newAdmin);
+        SaveChanges();
 
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var userData = new Dictionary<string, object>
-                        {
-                            {"name", reader.GetString(0)},
-                            {"trafficD", reader.GetDouble(1)},
-                            {"trafficW", reader.GetInt32(2)},
-                            {"trafficM", reader.GetInt32(3)}
-                        };
-                        result.Add(userData);
-                    }
-                }
-                
-                var jsonResult = JsonConvert.SerializeObject(result);
-
-                return jsonResult;
-            }
-        }
-
-        private static bool IsValidEmail(string email)
-        {
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            return Regex.IsMatch(email, pattern);
-        }
-
-        public static bool CreateAdmin(string username)
-        {
-            if (!IsValidEmail(username))
-            {
-                // Invalid email, so don't proceed.
-                return false;
-            }
-
-            try
-            {
-                using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-                {
-                    connection.Open();
-            
-                    if (IsAdminExists(connection, username))
-                    {
-                        // Admin with this username already exists.
-                        return false;
-                    }
-
-                    InsertAdmin(connection, username);
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error while executing SQL: " + e.Message);
-                return false;
-            }
-        }
-        public static bool IsAdminExists(string username)
-        {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT COUNT(*) FROM admins WHERE username = $username;";
-                    command.Parameters.AddWithValue("$username", username);
-
-                    int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
-                    return existingUserCount > 0;
-                }
-            }
-        }
-
-        private static bool IsAdminExists(SqliteConnection connection, string username)
-        {
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "SELECT COUNT(*) FROM admins WHERE username = $username;";
-                command.Parameters.AddWithValue("$username", username);
-
-                int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
-                return existingUserCount > 0;
-            }
-        }
-
-        public static bool VerifyAdmin(string username)
-        {
-            using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-            {
-                connection.Open();
-                if (IsAdminExists(connection, username))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        private static void InsertAdmin(SqliteConnection connection, string username)
-        {
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "INSERT INTO admins (username) VALUES ($username);";
-                command.Parameters.AddWithValue("$username", username);
-                command.ExecuteNonQuery();
-            }
-        }
-        
-        public static bool DeleteAdmin(string username)
-        {
-            if (string.IsNullOrEmpty(username) || !IsValidEmail(username))
-            {
-                // El nombre de usuario no es válido, no procedemos.
-                return false;
-            }
-
-            try
-            {
-                using (var connection = new SqliteConnection($"Data Source={databasePath}"))
-                {
-                    connection.Open();
-
-                    if (!IsAdminExists(connection, username))
-                    {
-                        // El admin no existe, no podemos eliminarlo.
-                        return false;
-                    }
-
-                    RemoveAdmin(connection, username);
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error while executing SQL: " + e.Message);
-                return false;
-            }
-        }
-
-        private static void RemoveAdmin(SqliteConnection connection, string username)
-        {
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "DELETE FROM admins WHERE username = $username;";
-                command.Parameters.AddWithValue("$username", username);
-                command.ExecuteNonQuery();
-            }
-        }
+        return true;
     }
+
+    public  bool IsAdminExists(string username)
+    {
+        return Admins.Any(a => a.Username == username);
+    }
+
+    public  bool VerifyAdmin(string username)
+    {
+        return IsAdminExists(username);
+    }
+
+    public  bool DeleteAdmin(string username)
+    {
+        if (string.IsNullOrEmpty(username) || !IsValidEmail(username))
+        {
+            // El nombre de usuario no es válido, no procedemos.
+            return false;
+        }
+
+        var adminToDelete = Admins.FirstOrDefault(a => a.Username == username);
+
+        if (adminToDelete != null)
+        {
+            Admins.Remove(adminToDelete);
+            SaveChanges();
+            return true;
+        }
+
+        // El admin no existe, no podemos eliminarlo.
+        return false;
+    }
+}

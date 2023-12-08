@@ -15,8 +15,8 @@ public class Cuota : ControllerBase
     }
 
     [HttpGet(Name = "GetCuota")]
-    public string Get()
+    public string Get([FromServices] Database database)
     {
-        return Database.GetAllUserDataAsJson();
+        return database.GetAllUserDataAsJson();
     }
 }

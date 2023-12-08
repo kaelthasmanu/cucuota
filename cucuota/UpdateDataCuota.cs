@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -8,22 +9,25 @@ namespace cucuota;
 public class UpdateDataCuota
 {
     private readonly WorkingFiles _workingFiles;
-    public UpdateDataCuota(IOptions<WorkingFiles> workingFiles)
+    private readonly ReadLog log;
+    private readonly Database database;
+    public UpdateDataCuota(IOptions<WorkingFiles> workingFiles, ReadLog log , Database database) 
     {
         _workingFiles = workingFiles.Value;
+        this.log = log;
+        this.database = database;
     }
+    
 
     public void RunCuota()
     {
-       
-            Database database = new Database();
-            ReadLog log = new ReadLog();
+
             
-            database.CreateTablesIfNotExist();
+            
             var users = log.ReadFileToUsers(_workingFiles.FullLogFilePath);
             log.ReadFileToTraffic(users, _workingFiles.FullLogFilePath);
             var list = Parsing.ParseUserData(_workingFiles.FullQuoteFilePath);
-            List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(Database.GetAllUserDataAsJson());
+            List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(database.GetAllUserDataAsJson());
             foreach (var user in userList)
             {
                 var matchingUserData = list.Find(userData => userData.Username == user.Name);

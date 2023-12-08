@@ -4,23 +4,26 @@ namespace cucuota;
 
 public class AddCuotaBackground:BackgroundService
 {
-    public AddCuotaBackground(UpdateDataCuota updateDataCuota)
+    private readonly IServiceProvider services;
+    public AddCuotaBackground(IServiceProvider services)
     {
-        _updateDataCuota = updateDataCuota;
+        this.services = services;
     }
-    private readonly UpdateDataCuota _updateDataCuota;
+    
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var scope = services.CreateScope();
+        UpdateDataCuota _updateDataCuota = scope.ServiceProvider.GetRequiredService<UpdateDataCuota>();
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(1000,stoppingToken);
+            await Task.Delay(300000,stoppingToken);
             try
             {
                 _updateDataCuota.RunCuota();
             }
             catch (Exception e)
             {
-                Console.WriteLine("File not found");   
+                Console.WriteLine($"File not found: {e}");   
             }
             await Task.Delay(9000,stoppingToken);
         }
