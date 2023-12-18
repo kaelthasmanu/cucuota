@@ -16,14 +16,14 @@ public class AddCuotaBackground:BackgroundService
         UpdateDataCuota _updateDataCuota = scope.ServiceProvider.GetRequiredService<UpdateDataCuota>();
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(300000,stoppingToken);
+            await Task.Delay(20000,stoppingToken);
             try
             {
                 _updateDataCuota.RunCuota();
             }
             catch (Exception e)
             {
-                Console.WriteLine($"File not found: {e}");   
+                Console.WriteLine($"Error Service Background Quota: {e}");   
             }
             await Task.Delay(9000,stoppingToken);
         }

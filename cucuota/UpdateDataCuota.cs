@@ -21,43 +21,36 @@ public class UpdateDataCuota
 
     public void RunCuota()
     {
+        var users = log.ReadFileToUsers(_workingFiles.FullLogFilePath);
+        log.ReadFileToTraffic(users, _workingFiles.FullLogFilePath);
+        var list = Parsing.ParseUserData(_workingFiles.FullQuoteFilePath);
+        List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(database.GetAllUserDataAsJson());
+        foreach (var user in userList)
+        {
+            var matchingUserData = list.Find(userData => userData.Username == user.Name);
 
-            
-            
-            var users = log.ReadFileToUsers(_workingFiles.FullLogFilePath);
-            log.ReadFileToTraffic(users, _workingFiles.FullLogFilePath);
-            var list = Parsing.ParseUserData(_workingFiles.FullQuoteFilePath);
-            List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(database.GetAllUserDataAsJson());
-            foreach (var user in userList)
+            if (matchingUserData != null)
             {
-                var matchingUserData = list.Find(userData => userData.Username == user.Name);
-
-                if (matchingUserData != null)
+                if (user.TrafficD /1024  == matchingUserData.Gigabytes || user.TrafficD / 1024  > matchingUserData.Gigabytes)
                 {
-                    if (user.TrafficD /1024  == matchingUserData.Gigabytes || user.TrafficD / 1024  > matchingUserData.Gigabytes)
+                    try
                     {
-                        try
+                        string contenido = File.ReadAllText(_workingFiles.FullBannedFilePath);
+                        
+                        if (!contenido.Contains(user.Name))
                         {
-                            string contenido = File.ReadAllText(_workingFiles.FullBannedFilePath);
-                            
-                            if (!contenido.Contains(user.Name))
+                            using (StreamWriter writer = new StreamWriter(_workingFiles.FullBannedFilePath, true))
                             {
-                                using (StreamWriter writer = new StreamWriter(_workingFiles.FullBannedFilePath, true))
-                                {
-                                    writer.WriteLine(user.Name);
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("La línea ya existe en el archivo.");
+                                writer.WriteLine(user.Name);
                             }
                         }
-                        catch (IOException e)
-                        {
-                            Console.WriteLine("Ocurrió un error al escribir en el archivo: " + e.Message);
-                        }
+                    }
+                    catch (IOException e)
+                    {
+                        Console.WriteLine("Ocurrió un error al escribir en el archivo: " + e.Message);
                     }
                 }
             }
+        }
     }
 }

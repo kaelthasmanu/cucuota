@@ -23,8 +23,6 @@ public class Admin
 
 public class Database : DbContext
 {
-    private readonly string databasePath = "/Users/manuel/Desktop/cucuota/cucuota/database.db";
-
     public DbSet<User> Users { get; set; }
     public DbSet<Date> Dates { get; set; }
     public DbSet<Admin> Admins { get; set; }
@@ -33,7 +31,6 @@ public class Database : DbContext
     {
         
     }
-    
 
     public void CreateTablesIfNotExist()
     {

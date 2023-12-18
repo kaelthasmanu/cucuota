@@ -8,23 +8,20 @@ namespace cucuota;
 public class ReadLog
     {
         
-        public ReadLog(Database database)
+        public ReadLog(Database database, ILogger<ReadLog> logger)
         {
             _database = database;
+            _logger = logger;
         }
         private readonly Database _database ;
         private double gigabytes = 0;
         private double gigabytesForUser = 0;
-        //private readonly LogOptions _options;
-
-        /*public ReadLog(IOptions<LogOptions> options)
-        {
-            _options = options.Value;
-        }*/
-        public HashSet<string> ReadFileToUsers(string filePath )
+        private readonly ILogger<ReadLog> _logger;
+   
+        public HashSet<string> ReadFileToUsers(string filePath)
         {
             HashSet<string> usersUnicos = new HashSet<string>();
-
+            _logger.LogInformation("Inciando lectura del log ");
             try
             {
                 using (StreamReader sr = new StreamReader(filePath))
@@ -93,6 +90,5 @@ public class ReadLog
             }
             Console.WriteLine("Finish ReadLog adding to database...");
             _database.AddOrUpdateDateTime(Parsing.timestapToDate(double.Parse(splitLine[0])));
-            //Console.WriteLine($"La cantidad total de Gigas es de {Math.Round(gigabytes / 1024 / 1024 / 1024)}GB");
         }
     }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using cucuota;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +10,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        CultureInfo newCulture = new CultureInfo("en-US");
+        CultureInfo.CurrentCulture = newCulture;
         var builder = WebApplication.CreateBuilder(args);
         var builderconf = new ConfigurationBuilder();
         var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

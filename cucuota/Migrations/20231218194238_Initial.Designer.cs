@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cucuota.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20231208142510_Initial")]
+    [Migration("20231218194238_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
