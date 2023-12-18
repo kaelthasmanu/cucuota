@@ -135,6 +135,7 @@ This is an example of how to list things you need to use the software and how to
    manuel.gorrin     15gb/Month #Manuel Alberto Gorrin
    pepe.alberto      5gb/Month #Pepe Alberto
    juan.alfonso      10gb/Month #Juan Alfonso
+   *                 2GB/Month #Por defecto todos los usuarios que no estan especificados
    ```
 6. Create file for banned users `banned.txt`
   ```sh
@@ -222,8 +223,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] View Admin
-- [ ] Authentication LDAP
+- [x] View Admin
+- [x] Authentication LDAP
+- [ ] Server Statistics
 - [ ] Dashboard
     - [ ] Behavior Graphs
 

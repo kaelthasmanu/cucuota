@@ -164,7 +164,6 @@ public class Database : DbContext
     {
         if (string.IsNullOrEmpty(username) || !IsValidEmail(username))
         {
-            // El nombre de usuario no es válido, no procedemos.
             return false;
         }
 
@@ -176,8 +175,6 @@ public class Database : DbContext
             SaveChanges();
             return true;
         }
-
-        // El admin no existe, no podemos eliminarlo.
         return false;
     }
 }
