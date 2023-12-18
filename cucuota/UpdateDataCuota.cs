@@ -28,10 +28,33 @@ public class UpdateDataCuota
         foreach (var user in userList)
         {
             var matchingUserData = list.Find(userData => userData.Username == user.Name);
+            var all = list.Find(userData => userData.Username == "*");
 
             if (matchingUserData != null)
             {
                 if (user.TrafficD /1024  == matchingUserData.Gigabytes || user.TrafficD / 1024  > matchingUserData.Gigabytes)
+                {
+                    try
+                    {
+                        string contenido = File.ReadAllText(_workingFiles.FullBannedFilePath);
+                        
+                        if (!contenido.Contains(user.Name))
+                        {
+                            using (StreamWriter writer = new StreamWriter(_workingFiles.FullBannedFilePath, true))
+                            {
+                                writer.WriteLine(user.Name);
+                            }
+                        }
+                    }
+                    catch (IOException e)
+                    {
+                        Console.WriteLine("Ocurrió un error al escribir en el archivo: " + e.Message);
+                    }
+                }
+            }
+            else
+            {
+                if ((user.TrafficD /1024  == all.Gigabytes && user.Name != "-") || (user.TrafficD / 1024  > all.Gigabytes && user.Name != "-"))
                 {
                     try
                     {

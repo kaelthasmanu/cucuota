@@ -25,7 +25,6 @@ class Program
             .Get<JwtOptions>();
 
         IConfiguration config = builderconf.Build();
-
         // Add services to the container.
 
         builder.Services.AddControllers();
