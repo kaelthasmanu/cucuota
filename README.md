@@ -85,7 +85,9 @@
 
 ![Example FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example.png)
 ![Example2 FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example2.png)
-![Example3 FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example3.png)
+![Example3 FrontEnd](https://github.com/kaelthasmanu/cucuota/blob/main/cucuota/img/example3.jpg)
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
