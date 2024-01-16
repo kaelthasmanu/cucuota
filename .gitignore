@@ -5,7 +5,7 @@ cucuota/.DS_Store
 
 
 #Ignore appsettings
-cucuota/appsettings.json
+#cucuota/appsettings.json
 
 # Ignore build output
 cucuota/bin/

@@ -7,7 +7,6 @@ namespace cucuota;
 
 public class ReadLog
     {
-        
         public ReadLog(Database database, ILogger<ReadLog> logger)
         {
             _database = database;
@@ -62,18 +61,15 @@ public class ReadLog
                             {
                                 string cleanedLine = Regex.Replace(line, @"\s+", " ");
                                 splitLine = cleanedLine.Split(" ");
-                                if (_database.DoesLastDateTimeExist() == true)
-                                {
-                                    if (DateTime.Compare(Parsing.timestapToDate(double.Parse(splitLine[0])),
-                                            _database.GetLastDateTime()) > 0)
+                                if (_database.DoesLastDateTimeExist() == true && DateTime.Compare(Parsing.timestapToDate(double.Parse(splitLine[0])),
+                                        _database.GetLastDateTime()) > 0)
                                     {
                                         gigabytesForUser += double.Parse(splitLine[4]);
                                     }
-                                }
                                 else
-                                {
-                                    gigabytesForUser += double.Parse(splitLine[4]);
-                                }
+                                    {
+                                        gigabytesForUser += double.Parse(splitLine[4]);
+                                    }
                             }
                         }
                     }
