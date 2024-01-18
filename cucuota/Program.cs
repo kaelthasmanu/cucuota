@@ -70,7 +70,7 @@ class Program
         builder.Services.AddScoped<UpdateDataCuota>();
         builder.Services.AddDbContext<Database>(optionsBuilder =>
         {
-            var connectionString = builder.Configuration.GetConnectionString("DefaultAPP");
+            var connectionString = builder.Configuration.GetConnectionString("SqliteConnection");
             optionsBuilder.UseSqlite(connectionString);
         });
 

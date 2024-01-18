@@ -185,27 +185,31 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    nano appsettings.json
    ```
-10. Run project `cucuota.dll`
+10. Example to Create Migrations 
+  ```sh
+  /home/manuel/.dotnet/dotnet ef migrations add --project cucuota/cucuota.csproj --startup-project cucuota/cucuota.csproj --context Database --configuration Debug Initial --output-dir Migrations
+  ```
+11. Run project `cucuota.dll`
    ```sh
    dotnet cucuota.dll
    ```
-11. Adapt the systemd configuration for you in file `dotnet`
+12. Adapt the systemd configuration for you in file `dotnet`
   ```sh
   nano cucuota
   ```
-12. Copy file in the directory `etc/systemd/system`
+13. Copy file in the directory `etc/systemd/system`
   ```sh
   cp cucuota /etc/systemd/system/
   ```
-13. Reload all services systemd
+14. Reload all services systemd
   ```sh
   sudo systemctl daemon-reload
   ```
-14. Enable serivice `cucuota`
+15. Enable serivice `cucuota`
   ```sh
    systemctl enable cucuota
    ```
-15. Check status service 
+16. Check status service 
   ```sh
   systemctl status cucuota
   ```

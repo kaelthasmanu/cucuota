@@ -3,6 +3,11 @@
 .DS_Store
 cucuota/.DS_Store
 
+#DatabaseFiles
+cucuota/Migrations/
+cucuota/db.db
+cucuota/db.db-shm
+cucuota/db.db-wal
 
 #Ignore appsettings
 cucuota/appsettings.json
