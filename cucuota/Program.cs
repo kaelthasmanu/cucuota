@@ -79,7 +79,7 @@ class Program
         app.MapPost("/tokens/connect", (HttpContext ctx, JwtOptions jwtOptions) 
             => TokenEndpoint.Connect(ctx, jwtOptions));
 
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || true)
         {
             app.UseSwagger();
             app.UseSwaggerUI();
