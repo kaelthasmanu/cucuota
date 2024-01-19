@@ -79,12 +79,12 @@ public class ReadLog
                                         _database.GetLastDateTime()) > 0)
                                     {
                                         //Sum porcent to total ((% / 100) * total) + total)
-                                        gigabytesForUser += multiplier > 0 ? (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ( multiplier == 0 ? Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero));
+                                        gigabytesForUser += multiplier > 0 ? (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ( multiplier == 0 ? Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ((multiplier / 100) * -1) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)));
                                     }
                                 else if (!_database.DoesLastDateTimeExist())
                                 {
                                     //Sum porcent to total ((% / 100) * total) + total)
-                                    gigabytesForUser += multiplier > 0 ? (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ( multiplier == 0 ? Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero));
+                                    gigabytesForUser += multiplier > 0 ? (multiplier / 100) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)) + Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ( multiplier == 0 ? Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero) : ((multiplier / 100) * -1) * (Math.Round(double.Parse(splitLine[4]) / 1024 / 1024, MidpointRounding.AwayFromZero)));
                                 }
                             }
                         }
