@@ -9,6 +9,13 @@ public class User
     public int TrafficM { get; set; }
 }
 
+public class SiteQuota
+{
+    public int Id { get; set; }
+    public string Site { get; set; }
+    public int ConsumptionMultiplier { get; set; }
+}
+
 public class Date
 {
     public int Id { get; set; }
@@ -26,25 +33,62 @@ public class Database : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Date> Dates { get; set; }
     public DbSet<Admin> Admins { get; set; }
+    public DbSet<SiteQuota> SitesQuotas { get; set; }
 
     public Database(DbContextOptions<Database> options):base(options)
     {
         
     }
 
-    public void CreateTablesIfNotExist()
+    public bool AddSiteQuota(string site, int multiplier)
     {
-        if (!Users.Any() && !Dates.Any() && !Admins.Any())
+        try
         {
-            Database.Migrate();
-            Console.WriteLine("Tables created successfully.");
+            var existingSite = SitesQuotas.FirstOrDefault(s => s.Site == site);
+            if (existingSite != null)
+            {
+                existingSite.ConsumptionMultiplier = multiplier;
+                SaveChanges();
+                return true;
+            }
+            else
+            {
+                var newSite = new SiteQuota
+                {
+                    Site = site,
+                    ConsumptionMultiplier = multiplier
+                };
+                SitesQuotas.Add(newSite);
+                SaveChanges();
+                return true;
+            }
         }
-        else
+        catch (Exception e)
         {
-            Console.WriteLine("Tables already exist.");
+            Console.WriteLine($"Ha ocurrido un error agregando el sitio: {e}");
+            return false;
         }
     }
 
+    public int GetMultiplier(string site)
+    {
+        try
+        {
+            var result = SitesQuotas.FirstOrDefault(s => site.Contains((s.Site)));
+            if (result != null)
+            {
+                Console.WriteLine("Yes is contain");
+                return result.ConsumptionMultiplier;    
+            }
+
+            return 0;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e}");
+            return 0;
+        }
+    }
     public void AddOrUpdateUserData(string name, double trafficD, int trafficM, int trafficW)
     {
         var existingUser = Users.FirstOrDefault(u => u.Name == name);

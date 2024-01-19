@@ -24,7 +24,7 @@ public class UpdateDataCuota
         var users = log.ReadFileToUsers(_workingFiles.FullLogFilePath);
         log.ReadFileToTraffic(users, _workingFiles.FullLogFilePath);
         var list = Parsing.ParseUserData(_workingFiles.FullQuoteFilePath);
-        List<UserDataJson> userList = JsonConvert.DeserializeObject<List<UserDataJson>>(database.GetAllUserDataAsJson());
+        List<UserData> userList = JsonConvert.DeserializeObject<List<UserData>>(database.GetAllUserDataAsJson());
         foreach (var user in userList)
         {
             var matchingUserData = list.Find(userData => userData.Username == user.Name);

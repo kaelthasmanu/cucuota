@@ -27,8 +27,6 @@ public static class Parsing
                 {
                     // Utiliza una expresión regular para encontrar el patrón 'nombreusuario <n>Gb/month'
                     Match match = Regex.Match(line, @"(?i)(\S+)\s+(\d+)gb/month");
-                    Console.WriteLine(match.Groups[1].Value);
-                    //Match match = Regex.Match(line, @"(\S+)\s+(\d+)Gb/month");
 
                     if (match.Success)
                     {

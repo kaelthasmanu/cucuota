@@ -20,3 +20,23 @@ public class Cuota : ControllerBase
         return database.GetAllUserDataAsJson();
     }
 }
+
+[ApiController]
+[Route("[controller]")]
+public class SiteMultiplierQuota : ControllerBase
+{
+    [HttpPost(Name = "SiteMultiplierQuota")]
+    public bool SetMultiplier([FromServices] Database database, string site, int multiplier)
+    {
+        try
+        {
+            database.AddSiteQuota(site, multiplier);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Ha ocurrido un error en el controlador: {e}");
+            return false;
+        }
+    }
+}
