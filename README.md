@@ -158,6 +158,9 @@ This is an example of how to list things you need to use the software and how to
     }
   },
   "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "SqliteConnection": "Data Source=./db.db"
+  },
   "WorkingFiles": {
     "LogFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/access.log",
     "QuoteFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/quota.txt",
@@ -232,6 +235,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 - [x] View Admin
 - [x] Authentication LDAP
+- [x] Manager Traffic With %
 - [ ] Server Statistics
 - [ ] Dashboard
     - [ ] Behavior Graphs
