@@ -1,12 +1,23 @@
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+
 namespace cucuota;
+
+public class TimeReadLog
+{
+    public string Time { get; set; }
+
+    public string time => Time;
+}
 
 public class AddCuotaBackground:BackgroundService
 {
     private readonly IServiceProvider services;
-    public AddCuotaBackground(IServiceProvider services)
+    private readonly TimeReadLog _time;
+    public AddCuotaBackground(IServiceProvider services, IOptions<TimeReadLog> time)
     {
+        _time = time.Value;
         this.services = services;
     }
     
@@ -16,7 +27,7 @@ public class AddCuotaBackground:BackgroundService
         UpdateDataCuota _updateDataCuota = scope.ServiceProvider.GetRequiredService<UpdateDataCuota>();
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(20000,stoppingToken);
+            await Task.Delay(int.Parse(_time.time),stoppingToken);
             try
             {
                 _updateDataCuota.RunCuota();

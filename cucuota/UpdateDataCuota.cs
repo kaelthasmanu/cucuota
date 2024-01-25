@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 namespace cucuota;
 
-
-
 public class UpdateDataCuota
 {
     private readonly WorkingFiles _workingFiles;

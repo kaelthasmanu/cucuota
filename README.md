@@ -233,9 +233,12 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
+- [x] System Cuota
 - [x] View Admin
+- [x] View Client
 - [x] Authentication LDAP
 - [x] Manager Traffic With %
+- [ ] Free Traffic for X time
 - [ ] Server Statistics
 - [ ] Dashboard
     - [ ] Behavior Graphs

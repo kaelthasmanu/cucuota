@@ -63,6 +63,7 @@ class Program
 
         builder.Services.Configure<WorkingFiles>(builder.Configuration.GetSection("WorkingFiles"));
         builder.Services.Configure<ConfigLDAP>(builder.Configuration.GetSection("LDAPServer"));
+        builder.Services.Configure<TimeReadLog>(builder.Configuration.GetSection("TimeToReadLog"));
 
         builder.Services.AddScoped<ChangeCantQuota>();
         builder.Services.AddScoped<LDAPUtils>();

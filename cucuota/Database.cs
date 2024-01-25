@@ -9,6 +9,14 @@ public class User
     public int TrafficM { get; set; }
 }
 
+public class TimeCuotaPref
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public DateTime Time { get; set; }
+    public int Percentage { get; set; }
+}
+
 public class SiteQuota
 {
     public int Id { get; set; }
@@ -34,7 +42,8 @@ public class Database : DbContext
     public DbSet<Date> Dates { get; set; }
     public DbSet<Admin> Admins { get; set; }
     public DbSet<SiteQuota> SitesQuotas { get; set; }
-
+    public DbSet<TimeCuotaPref> TimeCuotaPrefs { get; set; }
+    
     public Database(DbContextOptions<Database> options):base(options)
     {
         
@@ -77,7 +86,6 @@ public class Database : DbContext
             var result = SitesQuotas.FirstOrDefault(s => site.Contains((s.Site)));
             if (result != null)
             {
-                Console.WriteLine("Yes is contain");
                 return result.ConsumptionMultiplier;    
             }
 
@@ -147,6 +155,7 @@ public class Database : DbContext
 
         return newDateTime;
     }
+
 
     public  string GetAllUserDataAsJson()
     {
@@ -221,4 +230,54 @@ public class Database : DbContext
         }
         return false;
     }
+    
+    //Crud
+    public bool AddTimeCuotaPref(string name, DateTime date, int percentage)
+    {
+        var existingUser = TimeCuotaPrefs.FirstOrDefault(u => u.Name == name);
+        if (existingUser == null)
+        {
+            var timeCuota = new TimeCuotaPref()
+            {
+                Name  = name,
+                Time = date,
+                Percentage = percentage
+            };
+            TimeCuotaPrefs.Add(timeCuota);
+            SaveChanges();
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("The name is already");
+            return false;
+        }
+    }
+
+    public TimeCuotaPref GetTimeCuotaPrefById(int id)
+    {
+        return TimeCuotaPrefs.Find(id);
+    }
+
+    public IQueryable<TimeCuotaPref> GetAllTimeCuotaPrefs()
+    {
+        return TimeCuotaPrefs;
+    }
+
+    public void UpdateTimeCuotaPref(TimeCuotaPref timeCuotaPref)
+    {
+        TimeCuotaPrefs.Update(timeCuotaPref);
+        SaveChanges();
+    }
+
+    public void DeleteTimeCuotaPref(string name)
+    {
+        var timeCuotaPref = TimeCuotaPrefs.Find(name);
+        if (timeCuotaPref != null)
+        {
+            TimeCuotaPrefs.Remove(timeCuotaPref);
+            SaveChanges();
+        }
+    }
+    // End Crud
 }
