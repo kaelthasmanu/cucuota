@@ -1,10 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace cucuota;
+
+public record class JwtOptions(
+    string Issuer,
+    string Audience,
+    string SigningKey,
+    int ExpirationSeconds
+);
+
 public static class TokenEndpoint
 {
     static string CreateAccessToken(

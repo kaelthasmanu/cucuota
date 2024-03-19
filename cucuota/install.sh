@@ -20,7 +20,7 @@ done
 echo "Downloading projects"
 
 #git clone https://github.com/kaelthasmanu/cucuota
-#git clone https://github.com/Rooterts/CuCuotaWeb
+#git clone https://github.com/kaelthasmanu/cucuota-frontend
 
 #cd cucuota/cucuota
 

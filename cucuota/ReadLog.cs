@@ -1,8 +1,4 @@
-﻿using System.Net;
-using System.IO;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+﻿using System.Text.RegularExpressions;
 namespace cucuota;
 
 public class ReadLog

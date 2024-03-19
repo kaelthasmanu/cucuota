@@ -150,11 +150,12 @@ This is an example of how to list things you need to use the software and how to
   ```
 8. For its correct functioning, this application needs the `appsettings.json` file to contain the following information
   ```sh
-  {
+{
   "Logging": {
     "LogLevel": {
       "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.EntityFrameworkCore.Database": "Warning"
     }
   },
   "AllowedHosts": "*",
@@ -162,16 +163,19 @@ This is an example of how to list things you need to use the software and how to
     "SqliteConnection": "Data Source=./db.db"
   },
   "WorkingFiles": {
-    "LogFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/access.log",
-    "QuoteFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/quota.txt",
-    "BannedFile": "/Users/manuel/Desktop/cucuota/cucuota/bin/Debug/net7.0/banned.txt"
+    "LogFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/access.log",
+    "QuoteFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/quota.txt",
+    "BannedFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/banned.txt"
   },
   "LDAPServer": {
-    "Server": "domain or ip",
+    "Server": "nameserver or ip",
     "ServerPort": 389,
-    "UserDN": "manuel",
+    "UserDN": "username",
     "PasswordDN": "password",
     "DN": "ou=Usuarios,dc=domain,dc=cu"
+  },
+  "TimeToReadLog": {
+    "Time" : 60
   },
   "URLListen": {
     "base_url": "http://0.0.0.0:5173"

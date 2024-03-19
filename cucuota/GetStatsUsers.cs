@@ -1,8 +1,42 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace cucuota;
+
+public class ConnectionInfo
+{
+    public string Connection { get; set; }
+    public string FdInfo { get; set; }
+    public string FdDesc { get; set; }
+    public string InInfo { get; set; }
+    public string Remote { get; set; }
+    public string Local { get; set; }
+    public string NRequests { get; set; }
+    public string Uri { get; set; }
+    public string LogType { get; set; }
+    public string OutOffset { get; set; }
+    public string OutSize { get; set; }
+    public string RequestSize { get; set; }
+    public string Entry { get; set; }
+    public string Start { get; set; }
+    public string Username { get; set; }
+    public string DelayPool { get; set; }
+}
+
+public class SquidData
+{
+    public string ProtocolVersion { get; set; }
+    public int StatusCode { get; set; }
+    public string Server { get; set; }
+    public string MimeVersion { get; set; }
+    public DateTime Date { get; set; }
+    public string ContentType { get; set; }
+    public DateTime Expires { get; set; }
+    public DateTime LastModified { get; set; }
+    public string CacheControl { get; set; }
+    public List<string> CacheStatus { get; set; }
+    public List<ConnectionInfo> Connections { get; set; }
+}
 
 public class GetStatsUsers
 {
