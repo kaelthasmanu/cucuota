@@ -1,6 +1,6 @@
 #! /bin/bash
 
-package_names=("dotnet7" "unzip" "nodejs" "git")
+package_names=("dotnet8" "unzip" "nodejs" "git")
 LogFile=""
 QuoteFile=""
 BannedFile=""
