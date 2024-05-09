@@ -165,7 +165,12 @@ This is an example of how to list things you need to use the software and how to
   "WorkingFiles": {
     "LogFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/access.log",
     "QuoteFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/quota.txt",
-    "BannedFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/banned.txt"
+    "BannedFile": "/home/manuel/Desktop/cucuota/cucuota/bin/Debug/net8.0/banned.txt",
+    "FilePasswordLocal": "/etc/squid/passwords"
+  },
+  "ProxyServer": {
+    "Server": "nameserver or ip",
+    "Port": "3128"
   },
   "LDAPServer": {
     "Server": "nameserver or ip",
@@ -175,7 +180,7 @@ This is an example of how to list things you need to use the software and how to
     "DN": "ou=Usuarios,dc=domain,dc=cu"
   },
   "TimeToReadLog": {
-    "Time" : 60
+    "Time" : 300
   },
   "URLListen": {
     "base_url": "http://0.0.0.0:5173"
