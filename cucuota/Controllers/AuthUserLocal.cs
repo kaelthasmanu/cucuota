@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace cucuota.Controllers;
 
@@ -47,7 +48,7 @@ public class AuthUserLocal:ControllerBase
         }
     }
     [HttpPost("Auth", Name = "AuthLocal")]
-    public IActionResult AuthPassword(User request)
+    public IActionResult AuthPassword(User request, [FromServices] Database database)
     {
         string proxyUrl = $"http://{request.Username}:{request.Password}@{_configProxy.server}:{_configProxy.port}";
         Console.WriteLine(proxyUrl);
@@ -70,7 +71,31 @@ public class AuthUserLocal:ControllerBase
 
         if (output == "<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>\n")
         {
-            return Ok("Success");    
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            string token = Convert.ToBase64String(time.Concat(key).ToArray());
+            
+            if (database.VerifyAdmin(request.Username))
+            {
+                var data = new Dictionary<string, string>()
+                {
+                    { "message", "Success" },
+                    {"accessToken", token},
+                    {"user", request.Username},
+                    {"admin", "true"}
+                };
+                return Ok(JsonConvert.SerializeObject(data));    
+            }
+            else
+            {
+                var data = new Dictionary<string, string>()
+                {
+                    { "message", "Success" },
+                    {"accessToken", token},
+                    {"user", request.Username}
+                };
+                return Ok(JsonConvert.SerializeObject(data));
+            }    
         }
         else
         {
