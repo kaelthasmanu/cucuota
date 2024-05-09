@@ -7,7 +7,7 @@ namespace cucuota.Controllers;
 public class SearchUsersLDAP:ControllerBase
 {
     [HttpPost(Name = "SearchUsersLDAP")]
-    public IActionResult Post(UserLDAP request, [FromServices] LDAPUtils ldapUtils)
+    public IActionResult Post(User request, [FromServices] LDAPUtils ldapUtils)
     {
         bool resp = ldapUtils.SearchUser(request.Username);
         if (resp)

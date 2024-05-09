@@ -16,26 +16,30 @@ public class ReadLog
         public HashSet<string> ReadFileToUsers(string filePath)
         {
             HashSet<string> usersUnicos = new HashSet<string>();
-            _logger.LogInformation("Inciando lectura del log ");
-            try
+            if(File.Exists(filePath))
             {
-                using (StreamReader sr = new StreamReader(filePath))
+                _logger.LogInformation("Inciando lectura del log ");
+                try
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    using (StreamReader sr = new StreamReader(filePath))
                     {
-                        if (!line.Contains("HIER_NONE"))
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            string cleanedLine = Regex.Replace(line, @"\s+", " ");
-                            string[] splitLine = cleanedLine.Split(" ");
-                            usersUnicos.Add(splitLine[7]);
+                            if (!line.Contains("HIER_NONE"))
+                            {
+                                string cleanedLine = Regex.Replace(line, @"\s+", " ");
+                                string[] splitLine = cleanedLine.Split(" ");
+                                usersUnicos.Add(splitLine[7]);
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception error !!: " + e.Message);
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception error !!: " + e.Message);
+                }
+                return usersUnicos;    
             }
 
             return usersUnicos;
@@ -43,7 +47,9 @@ public class ReadLog
 
         public void ReadFileToTraffic(HashSet<string> usersUnicos, string filePath)
         {
-            int multiplier = 0;
+            if (File.Exists(filePath))
+            {
+                int multiplier = 0;
             string[] splitLine = new string[10];
             foreach (var user in usersUnicos)
             {
@@ -97,5 +103,10 @@ public class ReadLog
             }
             Console.WriteLine("Finish ReadLog adding to database...");
             _database.AddOrUpdateDateTime(Parsing.timestapToDate(double.Parse(splitLine[0])));
+            }
+            else
+            {
+                Console.WriteLine("No exist file");
+            }
         }
     }

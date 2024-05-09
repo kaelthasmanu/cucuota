@@ -8,7 +8,7 @@ namespace cucuota.Controllers;
 public class AuthUserLDAP:ControllerBase
 {
     [HttpPost(Name = "AuthUserLDAP")]
-    public IActionResult Post(UserLDAP request, [FromServices] LDAPUtils ldapUtils, [FromServices] Database database)
+    public IActionResult Post(User request, [FromServices] LDAPUtils ldapUtils, [FromServices] Database database)
     {
         bool resp = ldapUtils.AuthenticateUser(request.Username, request.Password);
         if (resp)

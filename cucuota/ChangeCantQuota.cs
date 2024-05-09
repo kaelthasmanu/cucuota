@@ -7,10 +7,12 @@ public class WorkingFiles
     public string LogFile{ get; set; }
     public string QuoteFile{ get; set; }
     public string BannedFile{ get; set; }
+    public string FilePasswordLocal{ get; set; }
     
     public string FullLogFilePath =>  LogFile;
     public string FullQuoteFilePath =>  QuoteFile;
     public string FullBannedFilePath =>  BannedFile;
+    public string FullFilePasswordLocal =>  FilePasswordLocal;
     
 }
 
