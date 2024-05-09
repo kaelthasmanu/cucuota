@@ -5,6 +5,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+
+public class ServerProxy
+{
+    public string Server{ get; set; }
+    public string Port{ get; set; }
+    
+    public string server =>  Server;
+    public string port =>  Port;
+    
+}
+
 class Program
 {
     static void Main(string[] args)
@@ -61,6 +72,7 @@ class Program
         builder.Services.AddAuthorization();
 
         builder.Services.Configure<WorkingFiles>(builder.Configuration.GetSection("WorkingFiles"));
+        builder.Services.Configure<ServerProxy>(builder.Configuration.GetSection("ProxyServer"));
         builder.Services.Configure<ConfigLDAP>(builder.Configuration.GetSection("LDAPServer"));
         builder.Services.Configure<TimeReadLog>(builder.Configuration.GetSection("TimeToReadLog"));
 
