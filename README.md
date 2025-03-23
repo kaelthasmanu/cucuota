@@ -119,11 +119,11 @@ This is an example of how to list things you need to use the software and how to
 
 1. Download files
    ```sh
-   wget https://github.com/kaelthasmanu/cucuota/releases/download/0.0.1/cucuota.zip
+   wget https://github.com/kaelthasmanu/cucuota/releases/download/0.0.3/cucuota.zip
    ```
-2. Install packages `.Net7 and zip`
+2. Install packages `.Net8 and zip`
    ```sh
-   sudo apt install dotnet7 unzip 
+   sudo apt install dotnet8 unzip 
    ```
 3. Unzip folder `linux-64.zip`
    ```sh
@@ -135,7 +135,7 @@ This is an example of how to list things you need to use the software and how to
   ```
 5. Example configuration for `quota.txt`
    ```sh
-   manuel.gorrin     15gb/Month #Manuel Alberto Gorrin
+   manuel.gorrin     15gb/Month #Manuel Alberto 
    pepe.alberto      5gb/Month #Pepe Alberto
    juan.alfonso      10gb/Month #Juan Alfonso
    *                 2GB/Month #Por defecto todos los usuarios que no estan especificados
@@ -286,7 +286,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - ([@telegram_handle](https://t.me/king_0f_deathhh)) - manuelalberto.gorrin@gmail.com
+Manuel - ([@Manuel](https://t.me/king_0f_deathhh)) - manuelalberto.gorrin@gmail.com
 
 Project Link: ([Project Link](https://github.com/kaelthasmanu/cucuota))
 
