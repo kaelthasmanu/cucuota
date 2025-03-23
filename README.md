@@ -109,9 +109,9 @@ This project is an alternative to a quota system for Squid. Client Web for this 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* dotnet7 and unzip
+* dotnet8 and unzip
   ```sh
-  sudo apt install dotnet7 unzip
+  sudo apt install dotnet8 unzip
   ```
 
 ### Installation
